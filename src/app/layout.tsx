@@ -3,6 +3,7 @@ import "@/styles/globals.css";
 import { type Metadata } from "next";
 
 import { TRPCReactProvider } from "@/trpc/react";
+import { ToastWrapper } from "./_components/ToastWrapper";
 
 export const metadata: Metadata = {
   title: "Create T3 App",
@@ -16,7 +17,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <TRPCReactProvider>{children}</TRPCReactProvider>
+        <TRPCReactProvider>
+          {children}
+          <ToastWrapper />
+        </TRPCReactProvider>
       </body>
     </html>
   );

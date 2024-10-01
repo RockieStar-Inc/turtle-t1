@@ -8,6 +8,7 @@ import { useCallback, useRef, useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/components/ui/card";
+import { toast } from "sonner";
 
 async function setupRealtimeClient(apiKey: string): Promise<RealtimeClient> {
   const client = new RealtimeClient({ apiKey, dangerouslyAllowAPIKeyInBrowser: true });
@@ -25,11 +26,7 @@ async function setupRealtimeClient(apiKey: string): Promise<RealtimeClient> {
     const { item, delta } = event;
     const items = client.conversation.getItems();
     console.log("🚀 ~ client.on ~ items:", items)
-    /**
-     * item is the current item being updated
-     * delta can be null or populated
-     * you can fetch a full list of items at any time
-     */
+    toast.info("Conversation updated");
   });
 
   // Connect to Realtime API
@@ -43,8 +40,13 @@ export function RealtimeChat() {
   const [message, setMessage] = useState<string>("");
 
   const setupClient = useCallback(async () => {
-    const newClient = await setupRealtimeClient(openaiApiKey);
-    setClient(newClient);
+    try {
+      const newClient = await setupRealtimeClient(openaiApiKey);
+      setClient(newClient);
+      toast.success("Connected successfully");
+    } catch (error) {
+      toast.error("Failed to connect: " + (error as Error).message);
+    }
   }, [openaiApiKey]);
 
   const sendMessage = useCallback(() => {
@@ -54,15 +56,16 @@ export function RealtimeChat() {
         text: message
       }]);
       setMessage("");
+      toast.success("Message sent");
     } else {
-      console.error('Client not initialized or message is empty');
+      toast.error('Client not initialized or message is empty');
     }
   }, [client, message]);
   
   return (
     <Card className="w-full max-w-md mx-auto">
       <CardHeader>
-        <CardTitle>RealtimeChat</CardTitle>
+        <CardTitle>RealtimeChat (OpenAI SDK)</CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="space-y-2">
@@ -73,6 +76,7 @@ export function RealtimeChat() {
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
               setOpenaiApiKey(e.target.value);
               saveApiKey(e.target.value);
+              toast.info("API Key updated");
             }}
           />
           <Button onClick={setupClient} className="w-full">

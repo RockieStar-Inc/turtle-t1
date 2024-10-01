@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@auth/prisma-adapter": "^1.6.0",
+    "@openai/realtime-api-beta": "github:openai/openai-realtime-api-beta",
     "@prisma/client": "^5.20.0",
     "@t3-oss/env-nextjs": "^0.10.1",
     "@tanstack/react-query": "^5.59.0",

@@ -1,7 +1,8 @@
+'use client';
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-'use client';
+
 import { RealtimeClient } from '@openai/realtime-api-beta';
 import { useCallback, useRef, useState } from 'react';
 import { Button } from "@/components/ui/button";
